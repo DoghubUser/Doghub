@@ -1,8 +1,3 @@
-if not shared.DogHubLoaded then
-    warn("Execute o loader antes do DogHub principal!")
-    return
-end
-
 -- 🐶 Dog Hub - Brookhaven RP Script (Otimizado)
 local success, redzlib = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Library/main/V5/Source.lua"))()

@@ -1,11 +1,3 @@
--- Loader DogHub com verificação de execução
-
-if shared.DogHubLoaded then
-    warn("DogHub já está rodando!")
-    return
-end
-shared.DogHubLoaded = true
-
 local success, redzlib = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Library/main/V5/Source.lua"))()
 end)
