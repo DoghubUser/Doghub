@@ -3,7 +3,7 @@ local success, redzlib = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Library/main/V5/Source.lua"))()
 end)
 if not success or not redzlib then
-    warn("❌ Falha ao carregar a biblioteca redzlib!")
+    error(" Falha ao carregar a biblioteca redzlib!")
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Dog Hub - Erro",
         Text = "Falha ao carregar a biblioteca!",
@@ -56,7 +56,7 @@ Window:AddMinimizeButton({
 })
 
 -- TAB: Player
-local TabPlayer = Window:MakeTab({"🚶 Player", "rbxassetid://4483362458"})
+local TabPlayer = Window:MakeTab({"Player", "rbxassetid://4483362458"})
 
 -- Seção Movement
 TabPlayer:AddSection({"🕹️ Movement"})
@@ -153,7 +153,7 @@ TabPlayer:AddButton({"🔄 Rejoin Server", function()
 end})
 
 -- TAB: Avatar
-local TabAvatar = Window:MakeTab({"🎨 Avatar", "rbxassetid://4483362458"})
+local TabAvatar = Window:MakeTab({"Avatar", "rbxassetid://5012539477"})
 local selectedPlayer = ""
 
 TabAvatar:AddSection({"👤 Copy Avatar"})
@@ -247,7 +247,7 @@ TabAvatar:AddButton({
 })
 
 -- TAB: Troll
-local TabTroll = Window:MakeTab({"🃏 Troll", "rbxassetid://4483362458"})
+local TabTroll = Window:MakeTab({"Troll", "rbxassetid://10156263321"})
 local selectedTarget = ""
 local viewConnection
 
@@ -305,7 +305,7 @@ TabTroll:AddToggle({
 })
 
 -- TAB: Casas
-local TabCasas = Window:MakeTab({"🏠 Houses", "rbxassetid://4483362458"})
+local TabCasas = Window:MakeTab({"Houses", "rbxassetid://5100264543"})
 TabCasas:AddSection({"🛡️ Utilities"})
 
 local antiBanConnection
@@ -326,7 +326,7 @@ TabCasas:AddToggle({
 })
 
 -- TAB: ESP
-local TabChams = Window:MakeTab({"👓 ESP", "rbxassetid://4483362458"})
+local TabChams = Window:MakeTab({"Esp", "rbxassetid://6034304899"})
 
 -- Funções ESP
 local function clearESP()
