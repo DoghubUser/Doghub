@@ -1,5 +1,5 @@
 if not shared.DogHubLoaded then
-    error("Execute o loader antes do DogHub principal!")
+    warn("Execute o loader antes do DogHub principal!")
     return
 end
 
