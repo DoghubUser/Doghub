@@ -56,7 +56,7 @@ Window:AddMinimizeButton({
 })
 
 -- TAB: Player
-local TabPlayer = Window:MakeTab({"Player", "rbxassetid://4483362458"})
+local TabPlayer = Window:MakeTab({"Player", "rbxassetid://76527276016929"})
 
 -- Seção Movement
 TabPlayer:AddSection({"🕹️ Movement"})
@@ -153,7 +153,7 @@ TabPlayer:AddButton({"🔄 Rejoin Server", function()
 end})
 
 -- TAB: Avatar
-local TabAvatar = Window:MakeTab({"Avatar", "rbxassetid://5012539477"})
+local TabAvatar = Window:MakeTab({"Avatar", "rbxassetid://13289762854"})
 local selectedPlayer = ""
 
 TabAvatar:AddSection({"👤 Copy Avatar"})
@@ -242,12 +242,12 @@ TabAvatar:AddButton({
             Remotes.Wear:InvokeServer(tonumber(targetDesc.IdleAnimation))
         end
         
-        Notify("✅ Success", "Copied avatar from "..selectedPlayer)
+        print("✅ Success", "Copied avatar from "..selectedPlayer)
     end
 })
 
 -- TAB: Troll
-local TabTroll = Window:MakeTab({"Troll", "rbxassetid://10156263321"})
+local TabTroll = Window:MakeTab({"Troll", "rbxassetid://8058270196"})
 local selectedTarget = ""
 local viewConnection
 
@@ -305,7 +305,7 @@ TabTroll:AddToggle({
 })
 
 -- TAB: Casas
-local TabCasas = Window:MakeTab({"Houses", "rbxassetid://5100264543"})
+local TabCasas = Window:MakeTab({"Houses", "rbxassetid://127626368577508"})
 TabCasas:AddSection({"🛡️ Utilities"})
 
 local antiBanConnection
@@ -326,7 +326,7 @@ TabCasas:AddToggle({
 })
 
 -- TAB: ESP
-local TabChams = Window:MakeTab({"Esp", "rbxassetid://6034304899"})
+local TabChams = Window:MakeTab({"Esp", "rbxassetid://16149070679"})
 
 -- Funções ESP
 local function clearESP()
