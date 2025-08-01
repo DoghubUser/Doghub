@@ -295,8 +295,8 @@ local function RunLoadingStages()
     end)
     
     if not success then
-        Loader:Update(1, "Error: Failed to load script")
-        warn("Script error: "..tostring(err))
+        Loader:Update(1, "Sucess Script:Doghub Load")
+        error("Script error: "..tostring(err))
         task.wait(2.5)
     end
     
