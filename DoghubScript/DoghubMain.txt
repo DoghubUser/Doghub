@@ -1,6 +1,6 @@
 -- 🐶 Dog Hub - Brookhaven RP Script (Otimizado)
 local success, redzlib = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/DoghubUser/Doghub/main/Ui.lua"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/tlredz/Library/main/V5/Source.lua"))()
 end)
 if not success or not redzlib then
     error(" Falha ao carregar a biblioteca redzlib!")
