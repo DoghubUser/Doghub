@@ -11,18 +11,18 @@ local PlayerMouse = Player:GetMouse()
 local CoreGui = (gethui and gethui()) or game:GetService("CoreGui");
 
 local redzlib = {
-	Themes = {
-		Darker = {
-			["Color Hub 1"] = ColorSequence.new({
-				ColorSequenceKeypoint.new(0.00, Color3.fromRGB(25, 25, 25)),
-				ColorSequenceKeypoint.new(0.50, Color3.fromRGB(32.5, 32.5, 32.5)),
-				ColorSequenceKeypoint.new(1.00, Color3.fromRGB(25, 25, 25))
-			}),
-			["Color Hub 2"] = Color3.fromRGB(30, 30, 30),
-			["Color Stroke"] = Color3.fromRGB(40, 40, 40),
-			["Color Theme"] = Color3.fromRGB(88, 101, 242),
-			["Color Text"] = Color3.fromRGB(243, 243, 243),
-			["Color Dark Text"] = Color3.fromRGB(180, 180, 180)
+    Themes = {
+        DarkBlue = {
+            ["Color Hub 1"] = ColorSequence.new({
+                ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 20, 40)),
+                ColorSequenceKeypoint.new(0.50, Color3.fromRGB(15, 25, 45)),
+                ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 20, 40))
+            }),
+            ["Color Hub 2"] = Color3.fromRGB(15, 25, 45),
+            ["Color Stroke"] = Color3.fromRGB(25, 35, 55),
+            ["Color Theme"] = Color3.fromRGB(0, 162, 255),
+            ["Color Text"] = Color3.fromRGB(230, 230, 255),
+            ["Color Dark Text"] = Color3.fromRGB(180, 180, 200)
 		},
 		Dark = {
 			["Color Hub 1"] = ColorSequence.new({
