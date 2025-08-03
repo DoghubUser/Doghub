@@ -47,7 +47,22 @@ end)
 local Window = redzlib:MakeWindow({
     Title = "🐶 Dog Hub | BrookHaven", 
     SubTitle = "✨ Best mobile experience", 
-    SaveFolder = "DogHub"
+    SaveFolder = "DogHub",
+    Theme = {
+        ["Color Hub 1"] = ColorSequence.new({
+            ColorSequenceKeypoint.new(0.00, Color3.fromRGB(10, 20, 40)),
+            ColorSequenceKeypoint.new(0.50, Color3.fromRGB(18, 30, 55)),
+            ColorSequenceKeypoint.new(1.00, Color3.fromRGB(10, 20, 40))
+        }),
+        ["Color Hub 2"] = Color3.fromRGB(15, 25, 45),
+        ["Color Stroke"] = Color3.fromRGB(25, 40, 60),
+        ["Color Theme"] = Color3.fromRGB(0, 162, 255),
+        ["Color Text"] = Color3.fromRGB(230, 230, 255),
+        ["Color Dark Text"] = Color3.fromRGB(180, 200, 230),
+        ["Font"] = Enum.Font.GothamBold,
+        ["TextSize"] = 17,
+        ["MinimizedSize"] = UDim2.new(0.4, 0, 0.45, 0),
+    }
 })
 
 Window:AddMinimizeButton({
