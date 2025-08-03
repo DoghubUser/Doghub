@@ -1,4 +1,4 @@
--- RedzLib V5 - Custom Dark Blue Theme
+-- RedzLib V5 - Dark Blue Theme Mod
 local RedzLib = {}
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -8,7 +8,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
--- Theme Colors
+-- Theme Configuration
 local Theme = {
     Background = Color3.fromRGB(15, 15, 25),
     Topbar = Color3.fromRGB(25, 25, 40),
@@ -18,14 +18,14 @@ local Theme = {
     DarkText = Color3.fromRGB(150, 150, 170)
 }
 
--- Font Settings
+-- Font Configuration
 local Font = {
     Name = "GothamBold",
     Size = 14,
     TitleSize = 16
 }
 
--- Utility Functions
+-- Utility Functions (unchanged from original)
 local function MakeDraggable(topbarObject, object)
     local dragging = nil
     local dragInput = nil
@@ -92,7 +92,7 @@ local function RippleEffect(button)
     end)
 end
 
--- Main Window
+-- Main Window Function (modified size and colors)
 function RedzLib:MakeWindow(options)
     options = options or {}
     local Window = {}
@@ -107,8 +107,8 @@ function RedzLib:MakeWindow(options)
     MainFrame.Name = "MainFrame"
     MainFrame.BackgroundColor3 = Theme.Background
     MainFrame.BorderSizePixel = 0
-    MainFrame.Position = UDim2.new(0.275, 0, 0.225, 0)
-    MainFrame.Size = UDim2.new(0.45, 0, 0.55, 0) -- Custom size
+    MainFrame.Position = UDim2.new(0.275, 0, 0.225, 0) -- Centered at 45% width, 55% height
+    MainFrame.Size = UDim2.new(0.45, 0, 0.55, 0) -- Compact size
     MainFrame.ClipsDescendants = true
     MainFrame.Parent = ScreenGui
 
@@ -116,6 +116,7 @@ function RedzLib:MakeWindow(options)
     UICorner.CornerRadius = UDim.new(0, 6)
     UICorner.Parent = MainFrame
 
+    -- Topbar
     local Topbar = Instance.new("Frame")
     Topbar.Name = "Topbar"
     Topbar.BackgroundColor3 = Theme.Topbar
@@ -127,6 +128,7 @@ function RedzLib:MakeWindow(options)
     UICorner2.CornerRadius = UDim.new(0, 6)
     UICorner2.Parent = Topbar
 
+    -- Title
     local Title = Instance.new("TextLabel")
     Title.Name = "Title"
     Title.BackgroundTransparency = 1
@@ -139,6 +141,7 @@ function RedzLib:MakeWindow(options)
     Title.TextXAlignment = Enum.TextXAlignment.Left
     Title.Parent = Topbar
 
+    -- Subtitle
     local SubTitle = Instance.new("TextLabel")
     SubTitle.Name = "SubTitle"
     SubTitle.BackgroundTransparency = 1
@@ -153,7 +156,7 @@ function RedzLib:MakeWindow(options)
 
     MakeDraggable(Topbar, MainFrame)
 
-    -- Tabs
+    -- Tab Buttons
     local TabButtons = Instance.new("Frame")
     TabButtons.Name = "TabButtons"
     TabButtons.BackgroundTransparency = 1
@@ -167,6 +170,7 @@ function RedzLib:MakeWindow(options)
     UIListLayout.Padding = UDim.new(0, 0)
     UIListLayout.Parent = TabButtons
 
+    -- Pages
     local Pages = Instance.new("Frame")
     Pages.Name = "Pages"
     Pages.BackgroundTransparency = 1
@@ -185,7 +189,7 @@ function RedzLib:MakeWindow(options)
     UIPadding.PaddingTop = UDim.new(0, 10)
     UIPadding.Parent = Pages
 
-    -- Tab Functions
+    -- Tab Functions (unchanged functionality, updated visuals)
     function Window:MakeTab(options)
         options = options or {}
         local Tab = {}
@@ -241,7 +245,7 @@ function RedzLib:MakeWindow(options)
             Page.Visible = true
         end)
 
-        -- Section
+        -- Section (updated colors)
         function Tab:AddSection(options)
             options = options or {}
             local Section = {}
@@ -287,7 +291,7 @@ function RedzLib:MakeWindow(options)
                 Page.CanvasSize = UDim2.new(0, 0, 0, UIListLayout2.AbsoluteContentSize.Y + 10)
             end
 
-            -- Button
+            -- Button (updated colors)
             function Section:AddButton(options)
                 options = options or {}
                 local Button = {}
@@ -323,7 +327,7 @@ function RedzLib:MakeWindow(options)
                 return Button
             end
 
-            -- Toggle
+            -- Toggle (updated colors)
             function Section:AddToggle(options)
                 options = options or {}
                 local Toggle = {}
@@ -403,7 +407,7 @@ function RedzLib:MakeWindow(options)
                 return Toggle
             end
 
-            -- Slider
+            -- Slider (updated colors)
             function Section:AddSlider(options)
                 options = options or {}
                 local Slider = {}
@@ -510,7 +514,7 @@ function RedzLib:MakeWindow(options)
                 return Slider
             end
 
-            -- Dropdown
+            -- Dropdown (updated colors)
             function Section:AddDropdown(options)
                 options = options or {}
                 local Dropdown = {}
@@ -656,7 +660,7 @@ function RedzLib:MakeWindow(options)
         return Tab
     end
 
-    -- Minimize Button
+    -- Minimize Button (updated colors)
     function Window:AddMinimizeButton(options)
         options = options or {}
         local Button = options.Button or {}
@@ -689,7 +693,7 @@ function RedzLib:MakeWindow(options)
     return Window
 end
 
--- Icon Function
+-- Icon Function (unchanged)
 function RedzLib:GetIcon(id)
     return id
 end
