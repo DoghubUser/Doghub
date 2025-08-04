@@ -3,6 +3,8 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local Remotes = game:GetService("ReplicatedStorage"):WaitForChild("Remotes")
 
 -- Criar janela
 local Window = WindUI:CreateWindow({
@@ -25,10 +27,10 @@ local Tab = Window:Tab({ Title = "Principal", Icon = "settings" })
 
 -- Variáveis
 local selectedPlayer = nil
-local dropdownFrame
 local cameraToggle = false
+local dropdownElement = nil
 
--- Atualizar nomes dos jogadores
+-- Obter nomes de jogadores
 local function getPlayerNames()
     local list = {}
     for _, p in ipairs(Players:GetPlayers()) do
@@ -36,42 +38,47 @@ local function getPlayerNames()
             table.insert(list, p.Name)
         end
     end
-    print("[DEBUG] Jogadores disponíveis:", table.concat(list, ", "))
     return list
 end
 
--- Criar Dropdown
-local function createDropdown()
-    if dropdownFrame then dropdownFrame:Destroy() end
-    dropdownFrame = Tab:Dropdown({
-        Title = "Selecionar Jogador",
-        Values = getPlayerNames(),
-        Value = "",
-        Callback = function(p)
-            selectedPlayer = p
-            print("[DEBUG] Jogador selecionado:", selectedPlayer)
-        end
-    })
-    print("[DEBUG] Dropdown criado/recriado")
-end
-createDropdown()
+-- Seção principal
+Tab:Section({ 
+    Title = "Principal ⚙️",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
 
--- Botão: Atualizar Lista
-Tab:Button({
-    Title = "Atualizar Lista",
-    Callback = function()
-        print("[DEBUG] Botão 'Atualizar Lista' clicado")
-        createDropdown()
+-- Dropdown de jogador
+dropdownElement = Tab:Dropdown({
+    Title = "Selecionar Jogador",
+    Values = getPlayerNames(),
+    Value = "",
+    Callback = function(p)
+        selectedPlayer = p
+        print("[DEBUG] Jogador selecionado:", selectedPlayer)
     end
 })
 
--- Botão: Teleportar até jogador selecionado
+-- Atualizar lista
+Tab:Button({
+    Title = "Atualizar Lista",
+    Callback = function()
+        local players = getPlayerNames()
+        if dropdownElement and dropdownElement.SetValues then
+            dropdownElement:SetValues(players)
+            print("[INFO] Lista de jogadores atualizada.")
+        else
+            print("[WARN] Não foi possível atualizar a lista.")
+        end
+    end
+})
+
+-- Teleportar para jogador
 Tab:Button({
     Title = "Teleportar",
     Callback = function()
-        print("[DEBUG] Botão 'Teleportar' clicado")
         if not selectedPlayer then
-            print("[WARN] Nenhum jogador selecionado para teleportar")
+            print("[WARN] Nenhum jogador selecionado.")
             WindUI:Popup({
                 Title = "Nenhum jogador selecionado",
                 Content = "Selecione um jogador primeiro.",
@@ -93,17 +100,16 @@ Tab:Button({
     end
 })
 
--- Toggle: Visualizar jogador (sem popup, só print)
+-- Toggle: Visualizar jogador
 Tab:Toggle({
     Title = "Visualizar Jogador",
     Desc = "Foca a câmera no jogador selecionado.",
     Default = false,
     Callback = function(state)
         cameraToggle = state
-        print("[DEBUG] Toggle 'Visualizar Jogador' alterado para:", state)
 
         if not selectedPlayer then
-            print("[WARN] Nenhum jogador selecionado para visualizar.")
+            print("[WARN] Nenhum jogador selecionado.")
             return
         end
 
@@ -114,19 +120,110 @@ Tab:Toggle({
                     local humanoid = target and target.Character and target.Character:FindFirstChild("Humanoid")
                     if humanoid then
                         Camera.CameraSubject = humanoid
-                    else
-                        print("[WARN] Humanoid não encontrado no jogador:", selectedPlayer)
                     end
                     task.wait(0.2)
                 end
             end)
-            print("[INFO] Visualização do jogador ativada:", selectedPlayer)
         else
             local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
             if humanoid then
                 Camera.CameraSubject = humanoid
-                print("[INFO] Visualização do jogador desativada, câmera voltou para você.")
             end
         end
+    end
+})
+
+-- Botão: Copiar Avatar
+Tab:Button({
+    Title = "📋 Copy Avatar FE",
+    Desc = "Desc",
+    Callback = function()
+        if selectedPlayer == "" then 
+            print("❌ Nenhum player selecionado")
+            return 
+        end
+        
+        local targetPlayer = Players:FindFirstChild(selectedPlayer)
+        if not targetPlayer or not targetPlayer.Character then 
+            print("❌ Jogador não encontrado")
+            return 
+        end
+        
+        local humanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then 
+            print("❌ Humanoid não encontrado")
+            return 
+        end
+        
+        local targetDesc = humanoid:GetAppliedDescription()
+        local myHumanoid = Character:FindFirstChildOfClass("Humanoid")
+        if not myHumanoid then
+            print("❌ Seu humanoid não foi encontrado")
+            return
+        end
+        local currentDesc = myHumanoid:GetAppliedDescription()
+
+        local function applyItems(items)
+            for _, item in ipairs(items) do
+                if tonumber(item) then
+                    Remotes.Wear:InvokeServer(tonumber(item))
+                    task.wait(0.2)
+                end
+            end
+        end
+
+        -- Remover roupas antigas
+        applyItems({currentDesc.Shirt, currentDesc.Pants, currentDesc.Face})
+
+        -- Trocar corpo
+        if Remotes:FindFirstChild("ChangeCharacterBody") then
+            Remotes.ChangeCharacterBody:InvokeServer({
+                targetDesc.Torso, targetDesc.RightArm, targetDesc.LeftArm,
+                targetDesc.RightLeg, targetDesc.LeftLeg, targetDesc.Head
+            })
+            task.wait(0.5)
+        end
+
+        -- Aplicar roupas novas
+        applyItems({targetDesc.Shirt, targetDesc.Pants, targetDesc.Face})
+
+        -- Acessórios
+        for _, acc in ipairs(targetDesc:GetAccessories(true)) do
+            if acc.AssetId and tonumber(acc.AssetId) then
+                Remotes.Wear:InvokeServer(tonumber(acc.AssetId))
+                task.wait(0.2)
+            end
+        end
+
+        -- Cor da pele
+        local skinColor = targetPlayer.Character:FindFirstChild("Body Colors")
+        if skinColor and Remotes:FindFirstChild("ChangeBodyColor") then
+            Remotes.ChangeBodyColor:FireServer(tostring(skinColor.HeadColor))
+            task.wait(0.2)
+        end
+
+        -- Animação idle
+        if tonumber(targetDesc.IdleAnimation) and Remotes:FindFirstChild("Wear") then
+            Remotes.Wear:InvokeServer(tonumber(targetDesc.IdleAnimation))
+        end
+
+        print("✅ Avatar copiado com sucesso de " .. selectedPlayer)
+    end
+})
+
+-- Seção: Trolls
+Tab:Section({ 
+    Title = "Trolls - Avatar",
+    Icon = "user",
+    TextXAlignment = "Left",
+    TextSize = 15,
+})
+
+-- Toggle: Nome RGB
+Tab:Toggle({
+    Title = "Rgb Name + bio",
+    Default = true,
+    Callback = function(state) 
+        print("Toggle Rgb ativo:", state)
     end
 })
