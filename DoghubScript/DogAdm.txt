@@ -1,0 +1,84 @@
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Window = WindUI:CreateWindow({
+    Title = "🐶 Painel Administrativo",
+    Icon = "user",
+    Author = "Melhor Experiência Mobile/PC",
+    Folder = "CloudHub",
+    Size = UDim2.fromOffset(400, 300),
+    Transparent = true,
+    Theme = "Dark",
+    Resizable = false,
+    SideBarWidth = 180,
+    Background = "",
+    BackgroundImageTransparency = 0.42,
+    HideSearchBar = true,
+    ScrollBarEnabled = false,
+})
+
+local Tab = Window:Tab({
+    Title = "Principal",
+    Icon = "settings",
+})
+
+local dropdownFrame = nil
+local selectedPlayer = nil
+
+local function getPlayerNames()
+    local list = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then
+            table.insert(list, player.Name)
+        end
+    end
+    return list
+end
+
+local function createDropdown()
+    if dropdownFrame then
+        dropdownFrame:Destroy()
+    end
+    dropdownFrame = Tab:Dropdown({
+        Title = "Selecionar Jogador",
+        Values = getPlayerNames(),
+        Value = "",
+        Callback = function(p)
+            selectedPlayer = p
+        end
+    })
+end
+
+createDropdown()
+
+Tab:Button({
+    Title = "Atualizar Lista",
+    Callback = function()
+        WindUI:Popup({
+            Title = "Em breve",
+            Content = "Função de atualizar lista está em desenvolvimento.",
+            Buttons = { { Title = "Ok", Variant = "Primary" } }
+        })
+    end
+})
+
+Tab:Button({
+    Title = "Teleportar",
+    Callback = function()
+        if not selectedPlayer then
+            WindUI:Popup({
+                Title = "Nenhum jogador selecionado",
+                Content = "Selecione um jogador primeiro.",
+                Buttons = { { Title = "Ok", Variant = "Primary" } }
+            })
+            return
+        end
+
+        local target = Players:FindFirstChild(selectedPlayer)
+        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and
+           LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame
+        end
+    end
+})
