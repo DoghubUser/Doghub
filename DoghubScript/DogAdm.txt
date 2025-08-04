@@ -1,7 +1,10 @@
+-- 🐶 Painel Administrativo - Otimizado (com prints para debug)
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
 
+-- Criar janela
 local Window = WindUI:CreateWindow({
     Title = "🐶 Painel Administrativo",
     Icon = "user",
@@ -18,55 +21,57 @@ local Window = WindUI:CreateWindow({
     ScrollBarEnabled = false,
 })
 
-local Tab = Window:Tab({
-    Title = "Principal",
-    Icon = "settings",
-})
+local Tab = Window:Tab({ Title = "Principal", Icon = "settings" })
 
-local dropdownFrame = nil
+-- Variáveis
 local selectedPlayer = nil
+local dropdownFrame
+local cameraToggle = false
 
+-- Atualizar nomes dos jogadores
 local function getPlayerNames()
     local list = {}
-    for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer then
-            table.insert(list, player.Name)
+    for _, p in ipairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer then
+            table.insert(list, p.Name)
         end
     end
+    print("[DEBUG] Jogadores disponíveis:", table.concat(list, ", "))
     return list
 end
 
+-- Criar Dropdown
 local function createDropdown()
-    if dropdownFrame then
-        dropdownFrame:Destroy()
-    end
+    if dropdownFrame then dropdownFrame:Destroy() end
     dropdownFrame = Tab:Dropdown({
         Title = "Selecionar Jogador",
         Values = getPlayerNames(),
         Value = "",
         Callback = function(p)
             selectedPlayer = p
+            print("[DEBUG] Jogador selecionado:", selectedPlayer)
         end
     })
+    print("[DEBUG] Dropdown criado/recriado")
 end
-
 createDropdown()
 
+-- Botão: Atualizar Lista
 Tab:Button({
     Title = "Atualizar Lista",
     Callback = function()
-        WindUI:Popup({
-            Title = "Em breve",
-            Content = "Função de atualizar lista está em desenvolvimento.",
-            Buttons = { { Title = "Ok", Variant = "Primary" } }
-        })
+        print("[DEBUG] Botão 'Atualizar Lista' clicado")
+        createDropdown()
     end
 })
 
+-- Botão: Teleportar até jogador selecionado
 Tab:Button({
     Title = "Teleportar",
     Callback = function()
+        print("[DEBUG] Botão 'Teleportar' clicado")
         if not selectedPlayer then
+            print("[WARN] Nenhum jogador selecionado para teleportar")
             WindUI:Popup({
                 Title = "Nenhum jogador selecionado",
                 Content = "Selecione um jogador primeiro.",
@@ -76,9 +81,52 @@ Tab:Button({
         end
 
         local target = Players:FindFirstChild(selectedPlayer)
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") and
-           LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            LocalPlayer.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame
+        local hrpTarget = target and target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+        local hrpLocal = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+        if hrpTarget and hrpLocal then
+            hrpLocal.CFrame = hrpTarget.CFrame
+            print("[INFO] Teleportado para:", selectedPlayer)
+        else
+            print("[WARN] Não foi possível teleportar para o jogador:", selectedPlayer)
+        end
+    end
+})
+
+-- Toggle: Visualizar jogador (sem popup, só print)
+Tab:Toggle({
+    Title = "Visualizar Jogador",
+    Desc = "Foca a câmera no jogador selecionado.",
+    Default = false,
+    Callback = function(state)
+        cameraToggle = state
+        print("[DEBUG] Toggle 'Visualizar Jogador' alterado para:", state)
+
+        if not selectedPlayer then
+            print("[WARN] Nenhum jogador selecionado para visualizar.")
+            return
+        end
+
+        if state then
+            task.spawn(function()
+                while cameraToggle and selectedPlayer do
+                    local target = Players:FindFirstChild(selectedPlayer)
+                    local humanoid = target and target.Character and target.Character:FindFirstChild("Humanoid")
+                    if humanoid then
+                        Camera.CameraSubject = humanoid
+                    else
+                        print("[WARN] Humanoid não encontrado no jogador:", selectedPlayer)
+                    end
+                    task.wait(0.2)
+                end
+            end)
+            print("[INFO] Visualização do jogador ativada:", selectedPlayer)
+        else
+            local humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                Camera.CameraSubject = humanoid
+                print("[INFO] Visualização do jogador desativada, câmera voltou para você.")
+            end
         end
     end
 })
