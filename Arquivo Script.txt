@@ -79,11 +79,11 @@ end)
 Tab:Button({
     Title = "Teleportar",
     Callback = function()
-        if not selectedPlayer then
-            return WindUI:Popup({
-                Title = "Nenhum jogador selecionado",
-                Content = "Selecione um jogador primeiro.",
-                Buttons = { { Title = "Ok", Variant = "Primary" } }
+        if not selectedPlayer or selectedPlayer == "" then
+            return WindUI:Notify({
+                Title = "Aviso",
+                Content = "Você precisa selecionar um jogador primeiro.",
+                Duration = 3
             })
         end
 
@@ -93,6 +93,17 @@ Tab:Button({
 
         if hrpTarget and hrpLocal then
             hrpLocal.CFrame = hrpTarget.CFrame
+            WindUI:Notify({
+                Title = "Sucesso",
+                Content = "Você foi teleportado para " .. selectedPlayer .. ".",
+                Duration = 3
+            })
+        else
+            WindUI:Notify({
+                Title = "Erro",
+                Content = "Não foi possível teleportar para o jogador.",
+                Duration = 3
+            })
         end
     end
 })
@@ -103,9 +114,18 @@ Tab:Toggle({
     Desc = "Foca a câmera no jogador selecionado.",
     Default = false,
     Callback = function(state)
-        cameraToggle = state
-        if not selectedPlayer then return end
+        if not selectedPlayer or selectedPlayer == "" then
+            if state then
+                WindUI:Notify({
+                    Title = "Aviso",
+                    Content = "Você precisa selecionar um jogador para visualizar.",
+                    Duration = 3
+                })
+            end
+            return
+        end
 
+        cameraToggle = state
         if state then
             task.spawn(function()
                 while cameraToggle and selectedPlayer do
@@ -131,13 +151,34 @@ Tab:Button({
     Title = "📋 Copy Avatar FE",
     Desc = "Copia o avatar de outro jogador",
     Callback = function()
-        if not selectedPlayer or selectedPlayer == "" then return end
+        if not selectedPlayer or selectedPlayer == "" then 
+            WindUI:Notify({
+                Title = "Aviso",
+                Content = "Você precisa selecionar um jogador para copiar o avatar.",
+                Duration = 3
+            })
+            return 
+        end
 
         local targetPlayer = Players:FindFirstChild(selectedPlayer)
-        if not targetPlayer or not targetPlayer.Character then return end
+        if not targetPlayer or not targetPlayer.Character then
+            WindUI:Notify({
+                Title = "Erro",
+                Content = "Jogador alvo não está disponível.",
+                Duration = 3
+            })
+            return
+        end
 
         local humanoid = targetPlayer.Character:FindFirstChildOfClass("Humanoid")
-        if not humanoid then return end
+        if not humanoid then
+            WindUI:Notify({
+                Title = "Erro",
+                Content = "Humanoid do jogador alvo não encontrado.",
+                Duration = 3
+            })
+            return
+        end
 
         local targetDesc = humanoid:GetAppliedDescription()
         local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -189,6 +230,12 @@ Tab:Button({
         if tonumber(targetDesc.IdleAnimation) and Remotes:FindFirstChild("Wear") then
             Remotes.Wear:InvokeServer(tonumber(targetDesc.IdleAnimation))
         end
+
+        WindUI:Notify({
+            Title = "Sucesso",
+            Content = "Avatar copiado de " .. selectedPlayer .. ".",
+            Duration = 3
+        })
     end
 })
 

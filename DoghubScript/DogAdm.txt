@@ -1,241 +1,202 @@
+-- Verificação do jogo
 if game.PlaceId ~= 4924922222 then
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Oh No",
-        Text = "Este script só pode ser usado no jogo oficial.",
-        Duration = 5
-    })
-    return -- cancela o script
-end
-
--- Check if in the correct game
-if game.PlaceId ~= 4924922222 then
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Oh No",
-        Text = "Este script só pode ser usado no jogo oficial.",
+    game:GetService("StarterGui"):SetCore("SendNotification",{
+        Title = "Erro",
+        Text = "Script incompatível com este jogo",
         Duration = 5
     })
     return
 end
 
--- Loader UI
+-- Serviços
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 
-if CoreGui:FindFirstChild("DogHubLoading") then 
-    CoreGui:FindFirstChild("DogHubLoading"):Destroy()
+-- Remove GUI existente
+if CoreGui:FindFirstChild("CleanLoader") then
+    CoreGui:FindFirstChild("CleanLoader"):Destroy()
 end
 
+-- Cria a interface
 local gui = Instance.new("ScreenGui", CoreGui)
-gui.Name = "DogHubLoading"
-gui.IgnoreGuiInset = true
+gui.Name = "CleanLoader"
 gui.ResetOnSpawn = false
-gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-gui.DisplayOrder = 999
 
-local mainContainer = Instance.new("Frame", gui)
-mainContainer.Size = UDim2.new(1, 0, 1, 0)
-mainContainer.BackgroundTransparency = 1
-mainContainer.BorderSizePixel = 0
+-- Container principal (quadrado central)
+local mainFrame = Instance.new("Frame", gui)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.Size = UDim2.new(0, 350, 0, 220)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+mainFrame.BackgroundTransparency = 1 -- Começa transparente
+mainFrame.BorderSizePixel = 0
 
--- Fade-in overlay
-local fadeOverlay = Instance.new("Frame", mainContainer)
-fadeOverlay.Size = UDim2.new(1, 0, 1, 0)
-fadeOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
-fadeOverlay.BackgroundTransparency = 0
-fadeOverlay.BorderSizePixel = 0
-fadeOverlay.ZIndex = 10
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0.08, 0)
 
-TweenService:Create(fadeOverlay, TweenInfo.new(1.2, Enum.EasingStyle.Quint), {
-    BackgroundTransparency = 1
-}):Play()
+local stroke = Instance.new("UIStroke", mainFrame)
+stroke.Color = Color3.fromRGB(120, 120, 180)
+stroke.Thickness = 1.5
+stroke.Transparency = 1 -- Começa transparente
 
-local centralBox = Instance.new("Frame", mainContainer)
-centralBox.AnchorPoint = Vector2.new(0.5, 0.5)
-centralBox.Position = UDim2.new(0.5, 0, 0.5, 0)
-centralBox.Size = UDim2.new(0, 300, 0, 180)
-centralBox.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-centralBox.BackgroundTransparency = 1
-centralBox.BorderSizePixel = 0
+-- Ícone central
+local icon = Instance.new("ImageLabel", mainFrame)
+icon.Image = "rbxassetid://95785336864332"
+icon.Size = UDim2.new(0, 100, 0, 100)
+icon.Position = UDim2.new(0.5, -50, 0.3, -50)
+icon.BackgroundTransparency = 1
+icon.ImageTransparency = 1 -- Começa transparente
 
-local boxCorner = Instance.new("UICorner", centralBox)
-boxCorner.CornerRadius = UDim.new(0.05, 0)
+-- Barra de progresso
+local progressBg = Instance.new("Frame", mainFrame)
+progressBg.Size = UDim2.new(0.8, 0, 0, 6)
+progressBg.Position = UDim2.new(0.1, 0, 0.7, 0)
+progressBg.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+progressBg.BackgroundTransparency = 1 -- Começa transparente
+progressBg.BorderSizePixel = 0
+Instance.new("UICorner", progressBg).CornerRadius = UDim.new(1, 0)
 
-local boxStroke = Instance.new("UIStroke", centralBox)
-boxStroke.Color = Color3.fromRGB(180, 180, 255)
-boxStroke.Transparency = 1
-boxStroke.Thickness = 1.2
-
-TweenService:Create(centralBox, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {
-    BackgroundTransparency = 0.3
-}):Play()
-
-TweenService:Create(boxStroke, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {
-    Transparency = 0.5
-}):Play()
-
-local innerContainer = Instance.new("Frame", centralBox)
-innerContainer.AnchorPoint = Vector2.new(0.5, 0.5)
-innerContainer.Position = UDim2.new(0.5, 0, 0.5, 0)
-innerContainer.Size = UDim2.new(0.9, 0, 0.9, 0)
-innerContainer.BackgroundTransparency = 1
-
-local title = Instance.new("TextLabel", innerContainer)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0.1, 0)
-title.Text = "DOGHUB"
-title.Font = Enum.Font.GothamBlack
-title.TextColor3 = Color3.new(1, 1, 1)
-title.TextSize = 28
-title.TextTransparency = 1
-title.BackgroundTransparency = 1
-title.TextXAlignment = Enum.TextXAlignment.Center
-
-TweenService:Create(title, TweenInfo.new(1.2, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.4), {
-    TextTransparency = 0,
-    Position = UDim2.new(0, 0, 0, 0)
-}):Play()
-
-local status = Instance.new("TextLabel", innerContainer)
-status.Size = UDim2.new(1, -40, 0, 24)
-status.Position = UDim2.new(0, 20, 0.4, 0)
-status.Text = ""
-status.Font = Enum.Font.GothamMedium
-status.TextColor3 = Color3.fromRGB(220, 220, 255)
-status.TextSize = 16
-status.TextTransparency = 1
-status.BackgroundTransparency = 1
-status.TextXAlignment = Enum.TextXAlignment.Center
-
-local progressBG = Instance.new("Frame", innerContainer)
-progressBG.Size = UDim2.new(1, -60, 0, 4)
-progressBG.Position = UDim2.new(0, 30, 0.7, 0)
-progressBG.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
-progressBG.BackgroundTransparency = 1
-progressBG.BorderSizePixel = 0
-
-Instance.new("UICorner", progressBG).CornerRadius = UDim.new(1, 0)
-
-local progressBar = Instance.new("Frame", progressBG)
+local progressBar = Instance.new("Frame", progressBg)
 progressBar.Size = UDim2.new(0, 0, 1, 0)
-progressBar.BackgroundColor3 = Color3.fromRGB(180, 120, 255)
-progressBar.BackgroundTransparency = 1
+progressBar.BackgroundColor3 = Color3.fromRGB(140, 110, 240)
+progressBar.BackgroundTransparency = 1 -- Começa transparente
 progressBar.BorderSizePixel = 0
 Instance.new("UICorner", progressBar).CornerRadius = UDim.new(1, 0)
 
-local progressText = Instance.new("TextLabel", innerContainer)
-progressText.Size = UDim2.new(1, -60, 0, 20)
-progressText.Position = UDim2.new(0, 30, 0.8, 0)
-progressText.Text = ""
-progressText.Font = Enum.Font.Gotham
-progressText.TextColor3 = Color3.fromRGB(200, 200, 255)
-progressText.TextSize = 12
-progressText.TextTransparency = 1
-progressText.BackgroundTransparency = 1
-progressText.TextXAlignment = Enum.TextXAlignment.Center
+-- Textos
+local statusText = Instance.new("TextLabel", mainFrame)
+statusText.Size = UDim2.new(0.8, 0, 0, 24)
+statusText.Position = UDim2.new(0.1, 0, 0.8, 0)
+statusText.Text = ""
+statusText.Font = Enum.Font.GothamMedium
+statusText.TextColor3 = Color3.fromRGB(220, 220, 255)
+statusText.TextSize = 14
+statusText.TextTransparency = 1 -- Começa transparente
+statusText.BackgroundTransparency = 1
+statusText.TextXAlignment = Enum.TextXAlignment.Center
 
-task.spawn(function()
-    task.wait(0.5)
-    
-    TweenService:Create(progressBG, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.5), {
+local percentText = Instance.new("TextLabel", mainFrame)
+percentText.Size = UDim2.new(0.8, 0, 0, 20)
+percentText.Position = UDim2.new(0.1, 0, 0.6, 0)
+percentText.Text = "0%"
+percentText.Font = Enum.Font.Gotham
+percentText.TextColor3 = Color3.fromRGB(180, 180, 255)
+percentText.TextSize = 16
+percentText.TextTransparency = 1 -- Começa transparente
+percentText.BackgroundTransparency = 1
+percentText.TextXAlignment = Enum.TextXAlignment.Center
+
+-- Animação de entrada (Fade In)
+local function fadeIn()
+    -- Container principal
+    TweenService:Create(mainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
         BackgroundTransparency = 0.3
     }):Play()
     
-    TweenService:Create(progressBar, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.5), {
+    TweenService:Create(stroke, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
+        Transparency = 0.5
+    }):Play()
+    
+    -- Ícone
+    TweenService:Create(icon, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.2), {
+        ImageTransparency = 0.1,
+        Size = UDim2.new(0, 110, 0, 110),
+        Position = UDim2.new(0.5, -55, 0.3, -55)
+    }):Play()
+    
+    -- Barra de progresso
+    TweenService:Create(progressBg, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.4), {
+        BackgroundTransparency = 0.7
+    }):Play()
+    
+    TweenService:Create(progressBar, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.5), {
         BackgroundTransparency = 0
     }):Play()
     
-    TweenService:Create(progressText, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.7), {
-        TextTransparency = 0.5
+    -- Textos
+    TweenService:Create(statusText, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {
+        TextTransparency = 0.3
     }):Play()
     
-    TweenService:Create(status, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {
-        TextTransparency = 0
+    TweenService:Create(percentText, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.4), {
+        TextTransparency = 0.2
     }):Play()
-end)
-
-local loadingMessages = {
-    "Conectando aos servidores...",
-    "Verificando segurança...",
-    "Carregando recursos...",
-    "Otimizando desempenho...",
-    "Preparando ambiente...",
-    "Finalizando...",
-    "Pronto!"
-}
-
--- Function to load the main script after loading screen
-local function loadMainScript()
-    local loadstring = loadstring or function(code) return load(code) end
-    
-    local success, err = pcall(function()
-        local githubUrl = "https://raw.githubusercontent.com/DoghubUser/Doghub/main/DoghubScript/loader.txt"
-        local response = game:HttpGet(githubUrl, true)
-        return loadstring(response)()
-    end)
-    
-    if not success then
-        warn("Falha ao carregar o DogHub: " .. tostring(err))
-        game:GetService("StarterGui"):SetCore("SendNotification", {
-            Title = "DogHub Error",
-            Text = "Failed to load: " .. tostring(err),
-            Duration = 5
-        })
-    end
 end
 
-task.spawn(function()
-    task.wait(1.5)
+-- Animação de saída (Fade Out)
+local function fadeOut()
+    -- Container principal
+    TweenService:Create(mainFrame, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 380, 0, 240)
+    }):Play()
     
-    for i, msg in ipairs(loadingMessages) do
-        status.Text = ""
-        for j = 1, #msg do
-            status.Text = string.sub(msg, 1, j)
-            task.wait(0.03)
-        end
-        
-        local progress = i/#loadingMessages
-        TweenService:Create(progressBar, TweenInfo.new(0.8, Enum.EasingStyle.Quint), {
-            Size = UDim2.new(progress, 0, 1, 0),
-            BackgroundColor3 = Color3.fromHSV(progress*0.3, 0.8, 1)
-        }):Play()
-        
-        for p = 0, 100*progress, 2 do
-            progressText.Text = math.floor(p).."%"
-            task.wait(0.02)
-        end
-        
-        task.wait(0.5)
-    end
-    
-    TweenService:Create(boxStroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {
+    TweenService:Create(stroke, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {
         Transparency = 1
     }):Play()
     
-    task.wait(0.2)
+    -- Ícone
+    TweenService:Create(icon, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {
+        ImageTransparency = 1,
+        Size = UDim2.new(0, 130, 0, 130),
+        Position = UDim2.new(0.5, -65, 0.3, -65)
+    }):Play()
     
-    local exitSequence = {
-        TweenService:Create(title, TweenInfo.new(0.6, Enum.EasingStyle.Quint), {TextTransparency = 1}),
-        TweenService:Create(status, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.1), {TextTransparency = 1}),
-        TweenService:Create(progressText, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.2), {TextTransparency = 1}),
-        TweenService:Create(progressBar, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {BackgroundTransparency = 1}),
-        TweenService:Create(progressBG, TweenInfo.new(0.6, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.3), {BackgroundTransparency = 1}),
-        TweenService:Create(centralBox, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.4), {
-            BackgroundTransparency = 1,
-            Size = UDim2.new(0, 320, 0, 190)
-        }),
-        TweenService:Create(fadeOverlay, TweenInfo.new(0.8, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0.4), {
-            BackgroundTransparency = 0
-        })
-    }
+    -- Barra de progresso
+    TweenService:Create(progressBar, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
+        BackgroundTransparency = 1
+    }):Play()
     
-    for _, tween in ipairs(exitSequence) do
-        tween:Play()
+    TweenService:Create(progressBg, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {
+        BackgroundTransparency = 1
+    }):Play()
+    
+    -- Textos
+    TweenService:Create(statusText, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {
+        TextTransparency = 1
+    }):Play()
+    
+    TweenService:Create(percentText, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
+        TextTransparency = 1
+    }):Play()
+end
+
+-- Sistema de loading
+local loadingPhases = {
+    {text = "Inicializando sistemas...", progress = 0.2},
+    {text = "Carregando módulos...", progress = 0.4},
+    {text = "Configurando ambiente...", progress = 0.6},
+    {text = "Otimizando performance...", progress = 0.8},
+    {text = "Finalizando...", progress = 1}
+}
+
+local function updateProgress(phase)
+    statusText.Text = phase.text
+    TweenService:Create(progressBar, TweenInfo.new(0.7, Enum.EasingStyle.Quint), {
+        Size = UDim2.new(phase.progress, 0, 1, 0),
+        BackgroundColor3 = Color3.fromHSV(0.7 - (phase.progress * 0.4), 0.8, 1)
+    }):Play()
+    
+    for p = 0, phase.progress * 100, 2 do
+        percentText.Text = math.floor(p).."%"
+        task.wait(0.02)
+    end
+end
+
+-- Execução principal
+task.spawn(function()
+    fadeIn() -- Animação de entrada
+    
+    for _, phase in ipairs(loadingPhases) do
+        updateProgress(phase)
+        task.wait(0.8)
     end
     
-    task.wait(1.2)
+    task.wait(0.5)
+    fadeOut() -- Animação de saída
     
-
--- Script Proncipal Aqui 👇
-    
+    task.wait(1)
     gui:Destroy()
+    
+    -- SEU SCRIPT PRINCIPAL AQUI --
 end)
