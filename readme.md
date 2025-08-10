@@ -10,7 +10,8 @@ Sou uma pessoa que está começando no mundo da programação e apaixonada por a
 - 🌱 Comecei recentemente nessa jornada da programação  
 - 👯 Busco colaborar em projetos simples para ganhar experiência  
 - 💬 Me pergunte sobre: lógica de programação, Python e Lua  
-- 📫 Como me encontrar: [seu Discord ou email aqui]
+- 🌐 Quer entrar em contato? Acesse meu site para pegar meu Discord e YouTube!  
+  👉[doghub.app](https://dagroot-cpl.vercel.app/)
 
 ## Tecnologias que curto usar
 
